@@ -1,0 +1,152 @@
+var asyncHandler = require('express-async-handler')
+var generateToken = require('../utils/generateToken')
+var User = require('../model/User')
+require('dotenv').config();
+const {SECRET_KEY} = process.env
+
+
+// @desc    Register a new user
+// @route   POST /signup
+// @access  Public
+const registerUser = asyncHandler(async (req, res) => {
+    const { 
+        Firstname, 
+        Lastname, 
+        email,
+        password,
+        Gender,
+        Image,
+        PhoneNumber,
+        Subscription 
+        } = req.body
+  
+    const userExists = await User.findOne({ email })
+  
+    if (userExists) {
+      res.status(400)
+      throw new Error('User already exists')
+    }
+  
+    const user = await User.create({
+        Firstname, 
+        Lastname, 
+        email,
+        password,
+        Gender,
+        Image,
+        PhoneNumber,
+        Subscription 
+    })
+  
+    if (user) {
+      res.status(201).json({
+        _id : user._id,
+        Firstname : user.Firstname,
+        Lastname : user.Lastname,
+        email : user.email,
+        Gender : user.Gender,
+        Image : user.Image,
+        PhoneNumber : user.PhoneNumber,
+        Subscription : user.Subscription,
+        token: generateToken(user._id),
+      })
+    } else {
+      res.status(400)
+      throw new Error('Invalid user data')
+    }
+  })
+
+
+// @desc    Auth user & get token
+// @route   POST /login
+// @access  Public
+const authUser = asyncHandler(async (req, res) => {
+  
+    const { email, password } = req.body
+  
+    const user = await User.findOne({ email })
+  
+    if (user && (await user.matchPassword(password))) {
+      console.log('Signed In ' , Firstname , " " , Lastname )
+      res.json({
+        _id : user._id,
+        Firstname : user.Firstname,
+        Lastname : user.Lastname,
+        email : user.email,
+        Gender : user.Gender,
+        Image : user.Image,
+        PhoneNumber : user.PhoneNumber,
+        Subscription : user.Subscription,
+        token: generateToken(user._id),
+      })
+    } else {
+      res.status(401)
+      throw new Error('Invalid email or password')
+    }
+  })
+
+
+// @desc    Get user profile
+// @route   GET /profile
+// @access  Private
+const getUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id)
+
+  if (user) {
+    
+    res.json({
+        _id : user._id,
+        Firstname : user.Firstname,
+        Lastname : user.Lastname,
+        email : user.email,
+        Gender : user.Gender,
+        Image : user.Image,
+        PhoneNumber : user.PhoneNumber,
+        Subscription : user.Subscription,
+    })
+  } else {
+    res.status(404)
+    throw new Error('User not found')
+  }
+})
+
+
+// @desc    Update user profile
+// @route   PUT /profile
+// @access  Private
+const updateUserProfile = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id)
+  
+    if (user) {
+      
+      user.Firstname = req.body.Firstname || user.Firstname
+      user.Lastname = req.body.Lastname || user.Lastname
+      user.email = req.body.email || user.email
+      user.Gender = req.body.Gender || user.Gender
+      user.Image = req.body.Image || user.Image
+      user.PhoneNumber = req.body.PhoneNumber || user.PhoneNumber
+        
+      const updatedUser = await user.save()
+  
+      res.json({
+        _id : updatedUser._id,
+        Firstname : updatedUser.Firstname,
+        Lastname : updatedUser.Lastname,
+        email : updatedUser.email,
+        Gender : updatedUser.Gender,
+        Image : updatedUser.Image,
+        PhoneNumber : updatedUser.PhoneNumber,
+        token: generateToken(updatedUser._id),
+      })
+    } else {
+      res.status(404)
+      throw new Error('User not found')
+    }
+  })
+
+module.exports = {
+    authUser,
+    registerUser,
+    getUserProfile,
+    updateUserProfile
+  }
