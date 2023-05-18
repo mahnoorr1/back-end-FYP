@@ -1,4 +1,4 @@
-var asyncHandler = require('express-async-handler')
+var AsyncHandler = require('express-async-handler')
 var generateToken = require('../utils/generateToken')
 var User = require('../model/User')
 require('dotenv').config();
@@ -8,7 +8,7 @@ const {SECRET_KEY} = process.env
 // @desc    Register a new user
 // @route   POST /signup
 // @access  Public
-const registerUser = asyncHandler(async (req, res) => {
+const registerUser = AsyncHandler(async (req, res) => {
     const { 
         Firstname, 
         Lastname, 
@@ -60,36 +60,45 @@ const registerUser = asyncHandler(async (req, res) => {
 // @desc    Auth user & get token
 // @route   POST /login
 // @access  Public
-const authUser = asyncHandler(async (req, res) => {
-  
-    const { email, password } = req.body
-  
-    const user = await User.findOne({ email })
-  
-    if (user && (await user.matchPassword(password))) {
-      console.log('Signed In ' , Firstname , " " , Lastname )
+const authUser = AsyncHandler(
+  async(req,res,next)=>{
+    const {email, password} = req.body
+    const userExist = await User.findOne({email})
+    if(!userExist){
       res.json({
-        _id : user._id,
-        Firstname : user.Firstname,
-        Lastname : user.Lastname,
-        email : user.email,
-        Gender : user.Gender,
-        Image : user.Image,
-        PhoneNumber : user.PhoneNumber,
-        Subscription : user.Subscription,
-        token: generateToken(user._id),
+        status : 401,
+        error : "Invalid Email"
       })
-    } else {
-      res.status(401)
-      throw new Error('Invalid email or password')
     }
-  })
+    else{
+        if(await userExist.matchPassword(password)){
+            res.json({
+                _id : userExist._id,
+                fullName : userExist.fullName,
+                phoneNum : userExist.phoneNum,
+                profilePic : userExist.profilePic,
+                email : userExist.email,
+                //token generate
+                token : generateToken(userExist._id)
+            })
+        }
+        else{
+          res.json({
+            status : 401,
+            error : "Invalid Password"
+          })  
+          
+        
+        }
+    }
+}
+  )
 
 
 // @desc    Get user profile
 // @route   GET /profile
 // @access  Private
-const getUserProfile = asyncHandler(async (req, res) => {
+const getUserProfile = AsyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id)
 
   if (user) {
@@ -114,7 +123,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 // @desc    Update user profile
 // @route   PUT /profile
 // @access  Private
-const updateUserProfile = asyncHandler(async (req, res) => {
+const updateUserProfile = AsyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id)
   
     if (user) {

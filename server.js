@@ -9,16 +9,14 @@ var cors = require('cors')
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
-var connection = mongoose.connect('mongodb://localhost:27017/FinalYearProject', 
-    { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.set('strictQuery', true);
+const uri = "mongodb+srv://InfraState:FYP029-047@infrastate.1uhw1ea.mongodb.net/";
+
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Connected to MongoDB Atlas'))
+  .catch((err) => console.log('Error connecting to MongoDB Atlas:', err));
+
 var app = express();
-connection.then((db) => {
-    console.log("Connected correctly to server");
-  },
-   (err) => {  
-      console.log(err); 
-});
+
 
 
 // view engine setup
