@@ -11,22 +11,14 @@ var {
   updateUserProfile
 } = require('../controllers/userController')
 
-/* GET users listing. */
-router
-  .route('/')
-  .get(
-    function(req, res, next) {
-      res.send('Hello User');
-    }
-  );
+
   
 router
   .route('/signup')
   .post(registerUser)
 
 router
-  .route('/login')
-  .post(authUser)
+  .post( '/login',authUser)
 
 router
   .route('/profile')
