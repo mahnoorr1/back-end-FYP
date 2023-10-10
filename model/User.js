@@ -3,11 +3,11 @@ var bcrypt = require('bcryptjs')
 
 const userSchema = mongoose.Schema(
   {
-    Firstname: {
+    firstname: {
       type: String,
       required: true,
     },
-    Lastname: {
+    lastname: {
       type: String,
       required: true,
     },
@@ -20,20 +20,33 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    Gender: {
+    gender: {
       type: String,
       required: true,
     },
-    Image: {
+    image: {
       type: String
     },
-    PhoneNumber: {
+    phoneNumber: {
       type: String,
       required: true,
     },
-    Subscription: {
+    subscriptionStatus: {
       type: Boolean,
       default: false,
+    },
+    subscription: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Subscription',
+    },
+    status: {
+      type: Boolean, //if false means restricted
+      default: true,
+      required: true,
+    },
+    restrictedTill: {
+      type: Date,
+      default: Date.now,
     }
   },
   {
