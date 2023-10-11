@@ -9,7 +9,7 @@ var cors = require('cors')
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
-const uri = "mongodb+srv://InfraState:FYP029-047@infrastate.1uhw1ea.mongodb.net/";
+const uri = "mongodb+srv://Infrastate:029-047@infrastate.8pm4q6a.mongodb.net/";
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connected to MongoDB Atlas'))
