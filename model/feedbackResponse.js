@@ -20,6 +20,10 @@ const feedbackResponseSchema = mongoose.Schema(
             type: Date,
             default: Date.now,
         },
+        subject: {
+            type: String,
+            required: true,
+        }
     }
 )
 
