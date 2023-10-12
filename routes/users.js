@@ -8,7 +8,9 @@ var {
   authUser,
   registerUser,
   getUserProfile,
-  updateUserProfile
+  updateUserProfile,
+  getUsers,
+  deleteUser
 } = require('../controllers/userController')
 
 
@@ -24,5 +26,14 @@ router
   .route('/profile')
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile)
+
+router
+  .route('/getAllUsers')
+  .get(getUsers)
+
+router
+  .route('/deleteUser/:UserId')
+  .delete(deleteUser)
+
 
 module.exports = router;
