@@ -22,7 +22,6 @@ const userSchema = mongoose.Schema(
     },
     gender: {
       type: String,
-      required: true,
     },
     image: {
       type: String
@@ -31,7 +30,7 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    subscriptionStatus: {
+    SubscriptionStatus: {
       type: Boolean,
       default: false,
     },

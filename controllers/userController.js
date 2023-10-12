@@ -10,14 +10,13 @@ const {SECRET_KEY} = process.env
 // @access  Public
 const registerUser = AsyncHandler(async (req, res) => {
     const { 
-        Firstname, 
-        Lastname, 
+      firstname, 
+      lastname, 
         email,
         password,
-        Gender,
         Image,
-        PhoneNumber,
-        Subscription 
+        phoneNumber,
+        SubscriptionStatus 
         } = req.body
   
     const userExists = await User.findOne({ email })
@@ -29,14 +28,13 @@ const registerUser = AsyncHandler(async (req, res) => {
     }
   
     const user = await User.create({
-        Firstname, 
-        Lastname, 
+        firstname, 
+        lastname, 
         email,
         password,
-        Gender,
         Image,
-        PhoneNumber,
-        Subscription 
+        phoneNumber,
+        SubscriptionStatus  
     })
   
     if (user) {
@@ -153,9 +151,39 @@ const updateUserProfile = AsyncHandler(async (req, res) => {
     }
   })
 
+
+const getUsers = AsyncHandler(async (req, res) => {
+  const user = await User.find()
+
+  if (user) {
+    
+    res.send(user)
+  } else {
+    res.status(404)
+    throw new Error('User not found')
+  }
+})
+
+
+const deleteUser = AsyncHandler(async (req, res) => {
+  const id = req.params.UserId
+  const user = await User.findByIdAndDelete(id);
+
+  if (user) {
+
+    return res.status(204).send();
+  } else {
+    res.status(404)
+    throw new Error('User not found')
+  }
+})
+
+
 module.exports = {
     authUser,
     registerUser,
     getUserProfile,
-    updateUserProfile
+    updateUserProfile,
+    getUsers,
+    deleteUser
   }
