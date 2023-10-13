@@ -3,11 +3,11 @@ var bcrypt = require('bcryptjs')
 
 const adminSchema = mongoose.Schema(
   {
-    Firstname: {
+    firstname: {
       type: String,
       required: true,
     },
-    Lastname: {
+    lastname: {
       type: String,
       required: true,
     },
@@ -23,6 +23,10 @@ const adminSchema = mongoose.Schema(
     Image: {
       type: String
     },
+    isApproved:{
+      type : Boolean,
+      default : false
+    }
   },
   {
     timestamps: true,

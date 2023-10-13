@@ -13,6 +13,7 @@ var usersRouter = require('./routes/users');
 var ConstructionRouter = require('./routes/Buildings')
 var ruleRouter = require('./routes/Rule')
 var SpecificRuleRouter = require('./routes/SpecificRule')
+var AdminRouter = require('./routes/Admin')
 
 const uri = process.env.DATABASE_URL || "mongodb://localhost:27017/FinalYearProject";
 
@@ -38,6 +39,7 @@ app.use('/users', usersRouter);
 app.use('/Construction',ConstructionRouter)
 app.use('/Rules' , ruleRouter)
 app.use('/SpecificRules' , SpecificRuleRouter)
+app.use('/Admin',AdminRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

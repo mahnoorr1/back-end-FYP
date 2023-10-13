@@ -118,6 +118,32 @@ const getUserProfile = AsyncHandler(async (req, res) => {
 })
 
 
+const getSpecificProfile = AsyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.Uid)
+
+  try {
+    if (user) {
+    
+      res.json({
+          _id : user._id,
+          Firstname : user.Firstname,
+          Lastname : user.Lastname,
+          email : user.email,
+          Gender : user.Gender,
+          Image : user.Image,
+          PhoneNumber : user.PhoneNumber,
+          Subscription : user.Subscription,
+      })
+    } else {
+      res.status(404).json({message : 'User not found'})
+    }
+  } catch (err) {
+      console.error(err)
+  }
+  
+})
+
+
 // @desc    Update user profile
 // @route   PUT /profile
 // @access  Private
@@ -185,5 +211,6 @@ module.exports = {
     getUserProfile,
     updateUserProfile,
     getUsers,
-    deleteUser
+    deleteUser,
+    getSpecificProfile
   }

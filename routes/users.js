@@ -3,14 +3,15 @@ var router = express.Router();
 var User = require('../model/User')
 require('dotenv').config();
 const {SECRET_KEY} = process.env
-var {protect} = require('../middleware/authMiddleware')
+var {protect  , isAdmin} = require('../middleware/authMiddleware')
 var {
   authUser,
   registerUser,
   getUserProfile,
   updateUserProfile,
   getUsers,
-  deleteUser
+  deleteUser,
+  getSpecificProfile
 } = require('../controllers/userController')
 
 
@@ -29,7 +30,11 @@ router
 
 router
   .route('/getAllUsers')
-  .get(getUsers)
+  .get(isAdmin , getUsers)
+
+router
+  .route('/getSpecificUser/:Uid')
+  .get(isAdmin , getSpecificProfile)
 
 router
   .route('/deleteUser/:UserId')
