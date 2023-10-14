@@ -5,10 +5,11 @@ const alertSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    zone: {
-        type: Number,
-        required: true,
-        enum: [1, 2, 3, 4, 5],
+    //here will be user but for now it is admin
+    admin: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Admin', 
+        required: true, 
     },
     //to differentiate and filter by category
     type: {
@@ -16,21 +17,26 @@ const alertSchema = mongoose.Schema({
         required: true,
         enum: ['tracker', 'construction plan', 'road plan', 'user activity'],
     },
-    time: {
-        type: Date,
-        default: Date.now,
-    },
-    referenceId: {
-        type: mongoose.Schema.Types.ObjectId,
-        refPath: 'typeRef',
-    },
-    //could be any of type tracker, construction plan, road plan or user
-    typeRef: {
-        type: String,
-        required: true,
-        enum: ['Tracker', 'ConstructionPlan', 'RoadPlan', 'User'],
-    },
-});
+    // time: {
+    //     type: Date,
+    //     default: Date.now,
+    // },
+    // referenceId: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     refPath: 'typeRef',
+    // },
+    // //could be any of type tracker, construction plan, road plan or user
+    // typeRef: {
+    //     type: String,
+    //     required: true,
+    //     enum: ['Tracker', 'ConstructionPlan', 'RoadPlan', 'User'],
+    // },
+}
+,
+{
+    timestamps: true,
+  }
+  );
 const Alert = mongoose.model('Alert', alertSchema);
 
 module.exports = Alert;

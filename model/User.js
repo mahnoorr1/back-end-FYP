@@ -41,11 +41,9 @@ const userSchema = mongoose.Schema(
     status: {
       type: Boolean, //if false means restricted
       default: true,
-      required: true,
     },
     restrictedTill: {
       type: Date,
-      default: Date.now,
     }
   },
   {

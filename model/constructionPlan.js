@@ -8,8 +8,7 @@ const imageSchema = new mongoose.Schema({
 const constructionSchema = mongoose.Schema({
     constructionType: {
         type: String,
-        required: true,
-        enum: ['commercial', 'residential'],
+        required: true
     },
     lng: {
         type: Number,
@@ -21,13 +20,8 @@ const constructionSchema = mongoose.Schema({
         float: true,
         required: true,
     },
-    zone: {
+    PlotMeasurement: {
         type: Number,
-        required: true,
-        enum: [1, 2, 3, 4, 5],
-    },
-    location: {
-        type: String,
         required: true,
     },
     user: {
@@ -39,8 +33,7 @@ const constructionSchema = mongoose.Schema({
         enum: ['Admin', 'User'],
     },
     rules: {
-        type: [String],
-        default: [], 
+        type: Object,
     },
     roadDistance: {
         type: Number,

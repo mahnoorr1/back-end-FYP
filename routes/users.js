@@ -11,7 +11,8 @@ var {
   updateUserProfile,
   getUsers,
   deleteUser,
-  getSpecificProfile
+  getSpecificProfile,
+  restrictUser
 } = require('../controllers/userController')
 
 
@@ -40,5 +41,8 @@ router
   .route('/deleteUser/:UserId')
   .delete(deleteUser)
 
+router
+  .route('/restrictUser/:uid')
+  .put(isAdmin , restrictUser)
 
 module.exports = router;

@@ -22,7 +22,7 @@ const registerUser = AsyncHandler(async (req, res) => {
     const userExists = await User.findOne({ email })
   
     if (userExists) {
-      res.status(400).json({
+      return res.status(400).json({
         status: 'User Already Exist'
       })
     }
@@ -50,7 +50,7 @@ const registerUser = AsyncHandler(async (req, res) => {
         token: generateToken(user._id),
       })
     } else {
-      res.status(400)
+      return res.status(400)
     }
   })
 
@@ -63,7 +63,7 @@ const authUser = AsyncHandler(
     const {email, password} = req.body
     const userExist = await User.findOne({email})
     if(!userExist){
-      res.json({
+      return res.json({
         status : 401,
         error : "Invalid Email"
       })
@@ -81,7 +81,7 @@ const authUser = AsyncHandler(
             })
         }
         else{
-          res.json({
+         return res.json({
             status : 401,
             error : "Invalid Password"
           })  
@@ -124,7 +124,7 @@ const getSpecificProfile = AsyncHandler(async (req, res) => {
   try {
     if (user) {
     
-      res.json({
+      return res.json({
           _id : user._id,
           Firstname : user.Firstname,
           Lastname : user.Lastname,
@@ -135,7 +135,7 @@ const getSpecificProfile = AsyncHandler(async (req, res) => {
           Subscription : user.Subscription,
       })
     } else {
-      res.status(404).json({message : 'User not found'})
+      return res.status(404).json({message : 'User not found'})
     }
   } catch (err) {
       console.error(err)
@@ -161,32 +161,33 @@ const updateUserProfile = AsyncHandler(async (req, res) => {
         
       const updatedUser = await user.save()
   
-      res.json({
+      return res.json({
         _id : updatedUser._id,
-        Firstname : updatedUser.Firstname,
-        Lastname : updatedUser.Lastname,
+        firstname : updatedUser.firstname,
+        lastname : updatedUser.lastname,
         email : updatedUser.email,
-        Gender : updatedUser.Gender,
-        Image : updatedUser.Image,
-        PhoneNumber : updatedUser.PhoneNumber,
+        gender : updatedUser.gender,
+        image : updatedUser.image,
+        phoneNumber : updatedUser.phoneNumber,
         token: generateToken(updatedUser._id),
       })
     } else {
-      res.status(404)
-      throw new Error('User not found')
+      return res.status(404).json({ message: 'User not found.' }); 
     }
   })
 
 
 const getUsers = AsyncHandler(async (req, res) => {
-  const user = await User.find()
+  const user = await User.find().populate({
+    path: 'subscription',
+    select: 'type', // Select the fields you want
+})
+.exec();
 
   if (user) {
-    
-    res.send(user)
+    return res.send(user)
   } else {
-    res.status(404)
-    throw new Error('User not found')
+    return res.status(404).json({ message: 'Users not found.' }); 
   }
 })
 
@@ -199,11 +200,39 @@ const deleteUser = AsyncHandler(async (req, res) => {
 
     return res.status(204).send();
   } else {
-    res.status(404)
-    throw new Error('User not found')
+    return res.status(404).json({ message: 'User not found.' }); 
   }
 })
 
+const restrictUser = async(req,res,next) => {
+  try {
+    const user = await User.findById(req.params.uid)
+    if (!user){
+      return res.status(404).json({ message: "user Not Found" });
+    }
+    else{
+      user.status = false
+      user.restrictedTill = req.body.restrictedTill || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+      
+      const restrictedUser = await user.save()
+
+      res.send({
+        _id : restrictedUser._id,
+        firstname : restrictedUser.firstname,
+        lastname : restrictedUser.lastname,
+        email : restrictedUser.email,
+        gender : restrictedUser.gender,
+        image : restrictedUser.image,
+        status: restrictedUser.status,
+        restrictedTill : restrictedUser.restrictedTill,
+        phoneNumber : restrictedUser.PhoneNumber,
+      })
+    }
+
+  } catch (error) {
+    return res.status(500).json({ message: error }); 
+  }
+}
 
 module.exports = {
     authUser,
@@ -212,5 +241,6 @@ module.exports = {
     updateUserProfile,
     getUsers,
     deleteUser,
-    getSpecificProfile
+    getSpecificProfile,
+    restrictUser
   }
