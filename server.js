@@ -13,6 +13,12 @@ var usersRouter = require('./routes/users');
 var ConstructionRouter = require('./routes/Buildings')
 var ruleRouter = require('./routes/Rule')
 var SpecificRuleRouter = require('./routes/SpecificRule')
+var AdminRouter = require('./routes/Admin')
+var PoliciesRouter = require('./routes/Privacies')
+var feedbackRouter = require('./routes/feedback')
+var feedbackResponseRouter = require('./routes/feedbackReponse')
+var alertRouter = require('./routes/alerts')
+var subscriptionRouter = require('./routes/subscription')
 
 const uri = process.env.DATABASE_URL || "mongodb://localhost:27017/FinalYearProject";
 
@@ -34,10 +40,16 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/Policies' , PoliciesRouter)
 app.use('/users', usersRouter);
 app.use('/Construction',ConstructionRouter)
 app.use('/Rules' , ruleRouter)
 app.use('/SpecificRules' , SpecificRuleRouter)
+app.use('/Admin',AdminRouter)
+app.use('/feedback' , feedbackRouter)
+app.use('/feedbackResponse',feedbackResponseRouter)
+app.use('/Alert',alertRouter)
+app.use('/subscription' , subscriptionRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

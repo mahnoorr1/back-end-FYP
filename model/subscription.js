@@ -33,8 +33,12 @@ const subscriptionSchema = mongoose.Schema({
         default: true,
     },
     routesAccess: {
-        type: true,
+        type: Boolean,
+        required: true,
     },
+    support_per_day: {
+        type: Number
+    }
 
 });
 

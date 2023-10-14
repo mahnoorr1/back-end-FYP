@@ -7,6 +7,10 @@ const feedbackResponseSchema = mongoose.Schema(
             ref: 'Feedback', 
             required: true, 
         },
+        subject: {
+            type: String,
+            required: true,
+        },
         description: {
             type: String,
             required: true,
@@ -19,10 +23,6 @@ const feedbackResponseSchema = mongoose.Schema(
         date: {
             type: Date,
             default: Date.now,
-        },
-        subject: {
-            type: String,
-            required: true,
         }
     }
 )
