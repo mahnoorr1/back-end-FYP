@@ -25,7 +25,7 @@ const UpdatePolicies =
             return res.status(404).json({ message: 'Rule not found.' });
             }
         
-            return  res.status(200).json(updatedPolicy); 
+            return  res.send(updatedPolicy); 
         } catch (error) {
             console.error('Error updating rule:', error);
             return res.status(500).json({ message: 'Error updating rule.' });

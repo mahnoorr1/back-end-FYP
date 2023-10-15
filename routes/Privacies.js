@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/getPrivacyPolicy' ,getPrivacyPolicy)
-router.get('/updatePolicies/:policyId' ,isAdmin ,UpdatePolicies)
+router.put('/updatePolicies/:policyId' ,isAdmin ,UpdatePolicies)
 
 
 module.exports = router;
