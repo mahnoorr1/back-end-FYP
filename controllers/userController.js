@@ -101,7 +101,7 @@ const getUserProfile = AsyncHandler(async (req, res) => {
 
   if (user) {
     
-    res.json({
+    res.send({
         _id : user._id,
         Firstname : user.Firstname,
         Lastname : user.Lastname,
