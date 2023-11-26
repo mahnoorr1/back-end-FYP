@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/getResponses' , getfeedbackResponses)
 router.get('/getResponse/:fRId' ,getfeedbackResponse)
-router.post('/CreateResponse',CreatefeedbackResponse);
+router.post('/CreateResponse',isAdmin,CreatefeedbackResponse);
 
 
 module.exports = router;

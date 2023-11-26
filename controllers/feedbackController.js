@@ -19,7 +19,11 @@ const CreateFeedback = async(req,res,next)=>{
 const getfeedbacks = async (req, res, next) => {
 
         try {
-            const getfeedbacks = await feedback.find();
+            const getfeedbacks = await feedback.find().populate({
+                path: 'user',
+                select: 'firstname lastname email', // Select the fields you want
+            })
+            .exec();
         
 
         

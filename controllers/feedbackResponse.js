@@ -4,13 +4,22 @@ const feedbackResponse = require('../model/feedbackResponse')
 const CreatefeedbackResponse = async(req,res,next)=>{
         try {
             const  feedbackData  = req.body; 
+            const adminId = req.admin._id
 
-            const newfeedbackResponse = await feedbackResponse.create(feedbackData);
+            const newfeedback = {
+                feedbackData: {
+                    ...feedbackData,
+                    admin: adminId, // Add the admin field here
+                }
+            };
+    
+            console.log(newfeedback.feedbackData);
+            const newfeedbackResponse = await feedbackResponse.create(newfeedback.feedbackData);
             
-            return res.status(201).json(newfeedbackResponse); 
+             res.status(201).json(newfeedbackResponse); 
           } catch (error) {
             console.error('Error adding newfeedback:', error);
-            return res.status(500).json({ message: 'Error adding rule.' });
+             res.status(500).json({ message: 'Error adding rule.' });
           }
 
            

@@ -67,7 +67,9 @@ const authAdmin = AsyncHandler(
     }
     else{
         if(await userExist.matchPassword(password)){
+          console.log('Im valid')
             res.json({
+              status : 200,
                 _id : userExist._id,
                 Firstname : userExist.Firstname,
                 Lastname : userExist.Lastname,
@@ -79,6 +81,8 @@ const authAdmin = AsyncHandler(
             })
         }
         else{
+          console.log('Im invalid')
+
           res.json({
             status : 401,
             error : "Invalid Password"
