@@ -5,7 +5,7 @@ var {
     getfeedback,
     CreateFeedback
 } = require('../controllers/feedbackController')
-var { isAdmin , protect } = require('../middleware/authMiddleware')
+var { isAdmin , protect , isLoggedIn } = require('../middleware/authMiddleware')
 
 
 router.get('/', function(req, res, next) {
@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/getfeedbacks' , getfeedbacks)
 router.get('/getfeedback/:feedbackId' ,getfeedback)
-router.post('/createfeedback',CreateFeedback);
+router.post('/createfeedback',isLoggedIn,CreateFeedback);
 
 
 module.exports = router;

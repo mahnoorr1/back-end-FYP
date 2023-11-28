@@ -6,7 +6,7 @@ var {
     getOnePlan
 } = require('../controllers/Buildings')
 var {
-  isAdmin
+  isAdmin ,isLoggedIn
 } = require('../middleware/authMiddleware')
 
 
@@ -14,9 +14,9 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
-router.post('/getReportOfConstruction',isAdmin, Construction);
+router.post('/getReportOfConstruction',isLoggedIn, Construction);
 router.get('/getConstructionPlans',isAdmin, getPlans);
-router.get('/getOnePlan/:Pid' , getOnePlan)
+router.get('/getOnePlan/:Pid' ,isAdmin, getOnePlan)
 
 module.exports = router;
 

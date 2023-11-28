@@ -3,7 +3,7 @@ var generateToken = require('../utils/generateToken')
 var User = require('../model/User')
 require('dotenv').config();
 const {SECRET_KEY} = process.env
-
+var mongoose = require('mongoose')
 
 // @desc    Register a new user
 // @route   POST /signup
@@ -100,17 +100,9 @@ const getUserProfile = AsyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id)
 
   if (user) {
-    
-    res.send({
-        _id : user._id,
-        Firstname : user.Firstname,
-        Lastname : user.Lastname,
-        email : user.email,
-        Gender : user.Gender,
-        Image : user.Image,
-        PhoneNumber : user.PhoneNumber,
-        Subscription : user.Subscription,
-    })
+    res.send(
+       user
+    )
   } else {
     res.status(404)
     throw new Error('User not found')
@@ -124,16 +116,7 @@ const getSpecificProfile = AsyncHandler(async (req, res) => {
   try {
     if (user) {
     
-      return res.json({
-          _id : user._id,
-          Firstname : user.Firstname,
-          Lastname : user.Lastname,
-          email : user.email,
-          Gender : user.Gender,
-          Image : user.Image,
-          PhoneNumber : user.PhoneNumber,
-          Subscription : user.Subscription,
-      })
+      return res.json(user)
     } else {
       return res.status(404).json({message : 'User not found'})
     }
@@ -234,6 +217,43 @@ const restrictUser = async(req,res,next) => {
   }
 }
 
+const updateSubscription = AsyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  const subID = req.params.subscriptionID;
+
+  // Check if subID is a valid ObjectId
+  if (!mongoose.Types.ObjectId.isValid(subID)) {
+    return res.status(400).json({ message: 'Invalid subscription ID.' });
+  }
+
+  if (user) {
+    user.SubscriptionStatus = true;
+    user.subscription = new mongoose.Types.ObjectId(subID); 
+    const updatedUser = await user.save();
+
+    return res.json({
+      message : 'success'
+    });
+  } else {
+    return res.status(404).json({ message: 'User not found.' });
+  }
+});
+
+const checkSubscription = AsyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id)
+
+  if (user) {
+    
+    res.send({
+      Subscription : user.SubscriptionStatus
+    })
+  } else {
+    res.status(404)
+    throw new Error('User not found')
+  }
+})
+
+
 module.exports = {
     authUser,
     registerUser,
@@ -242,5 +262,7 @@ module.exports = {
     getUsers,
     deleteUser,
     getSpecificProfile,
-    restrictUser
+    restrictUser,
+    updateSubscription,
+    checkSubscription
   }
