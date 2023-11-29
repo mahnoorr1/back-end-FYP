@@ -36,7 +36,7 @@ const Construction =
                 if (isAlreadyBuilding) {
                     //here will be user id but for now it is admin id
                     const newAlert = await Alert.create({
-                            admin : req.admin,
+                            user : req.user,
                             type : 'construction plan',
                             description : "A building already exists"
                     })
@@ -68,7 +68,7 @@ const Construction =
                         Other : matchingRules.Other ? matchingRules.Other : null
                     }
                     const newAlert = await Alert.create({
-                        admin : req.admin,
+                        user : req.user,
                         type : 'construction plan',
                         description : "No Problem in creating Building"
                         })
@@ -77,7 +77,7 @@ const Construction =
                         PlotMeasurement : Plot_Measurment,
                         lng: longitude,
                         lat : latitude,
-                        user : req.admin,
+                        user : req.user,
                         userType : 'Admin',
                         rules : TotalRules 
                     }) 
