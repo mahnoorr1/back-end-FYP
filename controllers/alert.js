@@ -5,7 +5,7 @@ const getAlerts = async (req, res, next) => {
     try {
         const alerts = await Alert.find()
             .populate({
-                path: 'admin',
+                path: 'user',
                 select: 'firstname lastname email', // Select the fields you want
             })
             .exec();
@@ -24,7 +24,7 @@ const getAlerts = async (req, res, next) => {
 const getOneAlert = async(req,res,next) => {
     try {
         const getAlert = await Alert.findById(req.params.aid).populate({
-            path: 'admin',
+            path: 'user',
             select: 'firstName lastName email', 
         })
         .exec();

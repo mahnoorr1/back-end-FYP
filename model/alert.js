@@ -6,9 +6,9 @@ const alertSchema = mongoose.Schema({
         required: true,
     },
     //here will be user but for now it is admin
-    admin: {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Admin', 
+        ref: 'user', 
         required: true, 
     },
     //to differentiate and filter by category
