@@ -63,10 +63,7 @@ const authUser = AsyncHandler(
     const {email, password} = req.body
     const userExist = await User.findOne({email})
     if(!userExist){
-      return res.json({
-        status : 401,
-        error : "Invalid Email"
-      })
+      return res.status(401).json({ message: 'Incorrect email' });
     }
     else{
         if(await userExist.matchPassword(password)){
@@ -81,10 +78,7 @@ const authUser = AsyncHandler(
             })
         }
         else{
-         return res.json({
-            status : 401,
-            error : "Invalid Password"
-          })  
+          return res.status(401).json({ message: 'Incorrect Password' });
           
         
         }
